@@ -2,10 +2,13 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const path = require('path');
+const router = express.Router();
 
-app.get('/', (req, res) => res.send("Hello Duniya walon!"));
-app.listen(port, () => console.log( `App listening on port ${port}!`));
-
+app.get('/', (req, res) => {
+// console.log('req has the following: ', req);
+  res.sendfile('./public/index.html');
+});
 
 app.get('/catinfo', (req, res) => {
   const cat = {
@@ -15,3 +18,6 @@ app.get('/catinfo', (req, res) => {
   };
   res.json(cat);
 });
+
+app.use('/', router);
+app.listen(port, () => console.log( `App listening on port ${port}!`));
