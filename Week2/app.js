@@ -1,18 +1,27 @@
 'use strict';
 const express = require('express');
-const app = express();
-const port = 3000;
 const bodyParser = require('body-parser');
 
+const catsRoute = require('./routes/catRoute');
+const usersRoute = require('./routes/userRoute');
 
-const cats = require('./routes/catRoute');
-const users = require('./routes/userRoute');
+const passport = require('./utils/pass');
+const authRoute = require('./routes/authRoute');
 
+const cors = require('cors');
+const app = express();
+const db = require('./models/db');
+const port = 3000;
+
+app.use(express.static('public'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/cat', cats);
-app.use('/user', users);
+app.use('/auth', authRoute);
+app.use('/cat', passport.authenticate('jwt', {session:false}), catsRoute);
+app.use('/user',passport.authenticate('jwt', {session:false}), usersRoute);
 
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+//db.on('connected', () => {
+  app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+//});

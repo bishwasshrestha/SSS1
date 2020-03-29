@@ -1,5 +1,6 @@
  'use strict';
  const userModel = require('../models/userModel');
+ const userSchema = require('../models/user');
  const users = userModel.users;
 
  const user_list_get = (req, res) => {
@@ -15,12 +16,17 @@
 
  const user_post = (req, res) => {
    console.log('data from ', req.body);
-   res.send('With this end point, you can add users! ');
+    
  };
+ const user_db_get = async(req, res) =>{
+   const user = await userSchema.find();
+   res.send(user);
+ }
 
  module.exports = {
    user_get,
    user_list_get,
    user_post,
+   user_db_get,
  };
 
